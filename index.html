@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>PetPal - Your Friendly Pet Store</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
+  <style>
+    /* Root and color variables */
+    :root {
+      --dark-blue: #0a2540;
+      --dark-orange: #d35400;
+      --background-dark: #081f3f;
+      --text-light: #f0e9e1;
+      --card-bg: #112f5c;
+      --shadow: rgba(0, 0, 0, 0.3);
+      --border-radius: 12px;
+      --spacing: 16px;
+      --max-content-width: 1200px;
+    }
+
+    /* Reset and base */
+    *, *::before, *::after {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: 'Inter', sans-serif;
+      background-color: var(--background-dark);
+      color: var(--text-light);
+      line-height: 1.5;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      scroll-behavior: smooth;
+    }
+
+    a {
+      color: var(--dark-orange);
+      text-decoration: none;
+      transition: color 0.3s ease;
+    }
+    a:hover,
+    a:focus {
+      color: #ff6f19;
+      outline: none;
+    }
+
+    button {
+      cursor: pointer;
+      font-family: inherit;
+      background-color: var(--dark-orange);
+      color: var(--text-light);
+      border: none;
+      padding: 0.75rem 1.5rem;
+      border-radius: var(--border-radius);
+      font-weight: 700;
+      font-size: 1rem;
+      letter-spacing: 0.02em;
+      box-shadow: 0 4px 10px var(--shadow);
+      transition: background-color 0.3s ease, transform 0.3s ease;
+    }
+    button:hover,
+    button:focus {
+      background-color: #ff6f19;
+      transform: translateY(-2px);
+      outline: none;
+    }
+
+    /* Container max width and horizontal centering */
+    .container {
+      width: 90%;
+      max-width: var(--max-content-width);
+      margin: 0 auto;
+    }
+
+    /* Header Styles */
+    header {
+      background-color: var(--dark-blue);
+      padding: var(--spacing);
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      box-shadow: 0 3px 7px var(--shadow);
+    }
+    .header-inner {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .logo {
+      font-weight: 900;
+      font-size: 1.75rem;
+      color: var(--dark-orange);
+      user-select: none;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .logo .material-icons {
+      font-size: 2rem;
+    }
+
+    /* Navigation */
+    nav {
+      display: none;
+    }
+    .nav-links {
+      display: flex;
+      gap: 2rem;
+    }
+    .nav-links a {
+      font-weight: 600;
+      font-size: 1rem;
+      padding: 8px 0;
+      position: relative;
+    }
+    .nav-links a::after {
+      content: "";
+      position: absolute;
+      bottom: -4px;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: var(--dark-orange);
+      transform-origin: left;
+      transform: scaleX(0);
+      transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .nav-links a:hover::after,
+    .nav-links a:focus::after {
+      transform: scaleX(1);
+      outline: none;
+    }
+
+    /* Hamburger menu for mobile */
+    .hamburger {
+      background: none;
+      border: none;
+      color: var(--text-light);
+      font-size: 2rem;
+      display: block;
+      cursor: pointer;
+    }
+
+    /* Mobile Menu */
+    .mobile-nav {
+      background-color: var(--dark-blue);
+      width: 100%;
+      position: absolute;
+      top: 100%;
+      left: 0;
+      overflow: hidden;
+      max-height: 0;
+      transition: max-height 0.3s ease;
+      box-shadow: 0 4px 16px var(--shadow);
+      border-bottom-left-radius: var(--border-radius);
+      border-bottom-right-radius: var(--border-radius);
+    }
+    .mobile-nav.open {
+      max-height: 320px;
+    }
+    .mobile-nav a {
+      display: block;
+      padding: var(--spacing);
+      border-bottom: 1px solid #204067;
+      font-weight: 700;
+      font-size: 1.25rem;
+      user-select: none;
+      transition: background-color 0.3s ease;
+    }
+    .mobile-nav a:last-child {
+      border-bottom: none;
+    }
+    .mobile-nav a:hover,
+    .mobile-nav a:focus {
+      background-color: var(--dark-orange);
+      color: var(--text-light);
+      outline: none;
+    }
+
+    /* Hero Section */
+    .hero {
+      background: linear-gradient(135deg, var(--dark-blue), var(--background-dark));
+      padding: 96px 16px 64px;
+      text-align: center;
+      color: var(--text-light);
+      user-select: none;
+    }
+    .hero h1 {
+      font-size: 3rem;
+      font-weight: 900;
+      margin-bottom: 16px;
+      letter-spacing: 0.05em;
+      max-width: 700px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    .hero p {
+      font-size: 1.25rem;
+      opacity: 0.8;
+      max-width: 600px;
+      margin-left: auto;
+      margin-right: auto;
+      margin-bottom: 32px;
+      line-height: 1.4;
+    }
+
+    /* About Section */
+    .about-section {
+      background-color: var(--dark-blue);
+      padding: 64px 16px 64px;
+      color: var(--text-light);
+      user-select: none;
+    }
+    .about-section .container {
+      max-width: 900px;
+      text-align: center;
+    }
+    .about-section h2 {
+      font-weight: 900;
+      font-size: 2.25rem;
+      margin-bottom: 24px;
+      color: var(--dark-orange);
+      text-transform: uppercase;
+      user-select: none;
+    }
+    .about-section p {
+      font-size: 1.125rem;
+      opacity: 0.85;
+      line-height: 1.6;
+      user-select: text;
+    }
+
+    /* Products Section */
+    .products-section {
+      padding: 48px 16px 96px;
+      background-color: #0e356a;
+    }
+    .products-section h2 {
+      text-align: center;
+      font-weight: 900;
+      font-size: 2.5rem;
+      margin-bottom: 48px;
+      color: var(--dark-orange);
+      text-transform: uppercase;
+      user-select: none;
+    }
+    .products-grid {
+      display: grid;
+      gap: 32px;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      max-width: var(--max-content-width);
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    /* Product Card */
+    .product-card {
+      background-color: var(--card-bg);
+      border-radius: var(--border-radius);
+      box-shadow: 0 6px 12px var(--shadow);
+      display: flex;
+      flex-direction: column;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      overflow: hidden;
+    }
+    .product-card:hover,
+    .product-card:focus-within {
+      transform: translateY(-6px);
+      box-shadow: 0 12px 24px rgba(211, 84, 0, 0.6);
+      outline: none;
+    }
+    .product-card img {
+      width: 100%;
+      height: 180px;
+      object-fit: cover;
+      border-top-left-radius: var(--border-radius);
+      border-top-right-radius: var(--border-radius);
+      user-select: none;
+      pointer-events: none;
+    }
+    .product-info {
+      padding: 16px;
+      flex-grow: 1;
+      display: flex;
+      flex-direction: column;
+    }
+    .product-title {
+      font-weight: 700;
+      font-size: 1.2rem;
+      margin-bottom: 8px;
+      flex-grow: 1;
+    }
+    .product-description {
+      font-size: 0.9rem;
+      opacity: 0.7;
+      margin-bottom: 12px;
+      flex-grow: 0;
+    }
+    .product-price {
+      font-weight: 900;
+      font-size: 1.2rem;
+      color: var(--dark-orange);
+      margin-bottom: 12px;
+      user-select: none;
+    }
+    .add-to-cart {
+      margin-top: auto;
+      align-self: stretch;
+    }
+
+    /* Footer */
+    footer {
+      background-color: var(--dark-blue);
+      padding: 32px 16px;
+      color: var(--text-light);
+      text-align: center;
+      font-size: 0.9rem;
+      user-select: none;
+      border-top: 1px solid #113358;
+      margin-top: auto;
+    }
+
+    /* Responsive Navigation - Desktop */
+    @media (min-width: 768px) {
+      nav {
+        display: block;
+      }
+      .hamburger {
+        display: none;
+      }
+      .mobile-nav {
+        display: none !important;
+      }
+      .nav-links a {
+        font-size: 1.125rem;
+      }
+    }
+
+    /* Larger Desktop */
+    @media (min-width: 1440px) {
+      .hero h1 {
+        font-size: 4rem;
+      }
+      .products-grid {
+        gap: 48px;
+      }
+    }
+
+  </style>
+</head>
+<body>
+  <header role="banner">
+    <div class="container header-inner">
+      <a href="#" class="logo" aria-label="PetPal Home">
+        <span class="material-icons" aria-hidden="true">pets</span> PetPal
+      </a>
+      <nav role="navigation" aria-label="Primary navigation" class="nav-links">
+        <a href="#hero">Home</a>
+        <a href="#about">About</a>
+        <a href="#products">Products</a>
+        <a href="#contact">Contact</a>
+      </nav>
+      <button aria-label="Toggle menu" aria-expanded="false" aria-controls="mobile-menu" class="hamburger" id="menu-toggle">
+        <span class="material-icons">menu</span>
+      </button>
+    </div>
+    <nav id="mobile-menu" class="mobile-nav" aria-label="Mobile navigation" hidden>
+      <a href="#hero" tabindex="-1">Home</a>
+      <a href="#about" tabindex="-1">About</a>
+      <a href="#products" tabindex="-1">Products</a>
+      <a href="#contact" tabindex="-1">Contact</a>
+    </nav>
+  </header>
+
+  <main>
+    <section id="hero" class="hero" role="region" aria-label="Welcome section">
+      <h1>Welcome to PetPal</h1>
+      <p>Your friendly neighborhood pet store offering premium pet products with care and passion.</p>
+      <button type="button" onclick="document.getElementById('products').scrollIntoView({behavior:'smooth'})">Shop Now</button>
+    </section>
+
+    <section id="about" class="about-section" role="region" aria-label="About PetPal">
+      <div class="container">
+        <h2>About PetPal</h2>
+        <p>
+          At PetPal, we believe every pet deserves love, care, and the very best products.
+          As a truly pet-friendly store, we prioritize your pet’s happiness and well-being above all. 
+          Our team is passionate about supporting pet owners with quality, trustworthy, and thoughtfully
+          selected pet supplies and accessories.
+        </p>
+      </div>
+    </section>
+
+    <section id="products" class="products-section" role="region" aria-label="Product catalog">
+      <h2>Featured Products</h2>
+      <div class="products-grid">
+        <article class="product-card" tabindex="0" role="listitem" aria-label="Deluxe Dog Bed product">
+          <img src="images/dog bed.jpg" alt="Cozy deluxe dog bed with soft fabric and supportive cushion" loading="lazy" />
+          <div class="product-info">
+            <h3 class="product-title">Deluxe Dog Bed</h3>
+            <p class="product-description">Comfortable and stylish dog bed, perfect for dogs of all sizes.</p>
+            <div class="product-price">$49.99</div>
+            <button class="add-to-cart" type="button" aria-label="Add Deluxe Dog Bed to cart">Add to Cart</button>
+          </div>
+        </article>
+        <article class="product-card" tabindex="0" role="listitem" aria-label="Premium Cat Food product">
+          <img src="images/catfood.jpg" alt="Bag of premium dry cat food with natural ingredients" loading="lazy" />
+          <div class="product-info">
+            <h3 class="product-title">Premium Cat Food</h3>
+            <p class="product-description">Nutritious and delicious food made with natural ingredients your cat will love.</p>
+            <div class="product-price">$29.99</div>
+            <button class="add-to-cart" type="button" aria-label="Add Premium Cat Food to cart">Add to Cart</button>
+          </div>
+        </article>
+        <article class="product-card" tabindex="0" role="listitem" aria-label="Durable Dog Leash product">
+          <img src="images/dogleash.jpg" alt="Strong and ergonomic dog leash suitable for all breeds" loading="lazy" />
+          <div class="product-info">
+            <h3 class="product-title">Durable Dog Leash</h3>
+            <p class="product-description">Ergonomically designed leash for safe and comfortable walks with your dog.</p>
+            <div class="product-price">$19.99</div>
+            <button class="add-to-cart" type="button" aria-label="Add Durable Dog Leash to cart">Add to Cart</button>
+          </div>
+        </article>
+        <article class="product-card" tabindex="0" role="listitem" aria-label="Cat Scratching Post product">
+          <img src="images/catpost.jpg" alt="Durable and stylish scratching post to keep cats entertained and healthy" loading="lazy" />
+          <div class="product-info">
+            <h3 class="product-title">Cat Scratching Post</h3>
+            <p class="product-description">Encourage healthy scratching habits with this durable post for your cat.</p>
+            <div class="product-price">$34.99</div>
+            <button class="add-to-cart" type="button" aria-label="Add Cat Scratching Post to cart">Add to Cart</button>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section id="contact" role="region" aria-label="Contact information" class="container" style="padding-bottom: 96px; color: var(--text-light);">
+      <h2 style="text-align:center; margin-bottom: 24px; color: var(--dark-orange); font-weight: 900; text-transform: uppercase;">Contact Us</h2>
+      <p style="max-width: 600px; margin-left: auto; margin-right: auto; text-align: center; opacity: 0.9;">
+        Have questions or need assistance? Reach out to PetPal’s friendly customer support.
+      </p>
+      <div style="max-width: 400px; margin: 24px auto 0 auto; display: flex; flex-direction: column; gap: 16px;">
+        <a href="mailto:support@petpal.com" style="color: var(--dark-orange); font-weight: 700;" aria-label="Send email to support@petpal.com"><span class="material-icons" aria-hidden="true" style="vertical-align: middle;">email</span> PetPalSupportTEAM@gmail.com</a>
+        <a href="tel:+1234567890" style="color: var(--dark-orange); font-weight: 700;" aria-label="Call PetPal customer support phone number"><span class="material-icons" aria-hidden="true" style="vertical-align: middle;">phone</span> 0912-335-8496</a>
+      </div>
+    </section>
+  </main>
+
+  <footer role="contentinfo">
+    <div class="container">
+      PetPal &copy; 2024 - All rights reserved.
+    </div>
+  </footer>
+
+  <script>
+    // Mobile menu toggle
+    const menuToggle = document.getElementById('menu-toggle');
+    const mobileMenu = document.getElementById('mobile-menu');
+
+    menuToggle.addEventListener('click', () => {
+      const expanded = menuToggle.getAttribute('aria-expanded') === 'true' || false;
+      menuToggle.setAttribute('aria-expanded', !expanded);
+      if (!expanded) {
+        mobileMenu.hidden = false;
+        setTimeout(() => mobileMenu.classList.add('open'), 10);
+        // Set focus trap for accessibility
+        const links = mobileMenu.querySelectorAll('a');
+        links.forEach(link => link.setAttribute('tabindex', '0'));
+      } else {
+        mobileMenu.classList.remove('open');
+        setTimeout(() => {
+          mobileMenu.hidden = true;
+          const links = mobileMenu.querySelectorAll('a');
+          links.forEach(link => link.setAttribute('tabindex', '-1'));
+        }, 300);
+      }
+    });
+
+    // Close menu on link click for mobile
+    mobileMenu.querySelectorAll('a').forEach(link => {
+      link.addEventListener('click', () => {
+        if (window.innerWidth < 768) {
+          menuToggle.setAttribute('aria-expanded', false);
+          mobileMenu.classList.remove('open');
+          setTimeout(() => {
+            mobileMenu.hidden = true;
+            link.setAttribute('tabindex', '-1');
+          }, 300);
+        }
+      });
+    });
+  </script>
+</body>
+</html>
+
